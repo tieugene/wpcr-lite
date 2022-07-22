@@ -38,6 +38,8 @@ class WPCRL_Updater {
 		$this->active = is_plugin_active( $this->basename );
 	}
 	public function check_update( $transient ) {
+		// slot #1: pre_set_site_transient_update_plugins()
+		// just checks whether plugin update available
 		error_log("check_update()");
 		if ( empty( $transient->checked ) ) {
 			return $transient;
@@ -51,17 +53,17 @@ class WPCRL_Updater {
 		if ( version_compare( $this->version, $remote_meta->version, '<' ) ) {
 			error_log("Need update");
 			$response = array(
-				'slug' => $this->slug,
-				'new_version' => $remote_meta->version,
-				'url' => $remote_meta->url,
-				'package' => $this->slug        // FIXME: download url
+				//'url' => $remote_meta->url,  // this->plugin["PluginURI"]
+				'slug' => $this->slug,  // short
+				'package' => $remote_meta->url,
+				'new_version' => $remote_meta->version
 			);
-			$transient->response[$this->slug] = (object) $response;
+			$transient->response[$this->basename] = (object) $response;
 		}
 		return $transient;
 	}
-	public function check_info($obj, $action, $arg)
-	{
+	public function check_info($obj, $action, $arg) {
+		// slot for plugins_api
 		error_log("check_info()");
 		error_log($action);
 		if (!empty( $args->slug ) && $arg->slug === $this->slug) {
