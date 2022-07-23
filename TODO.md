@@ -9,3 +9,4 @@ Issues:
 - [ ] Std plugin struct
 - [ ] Self update from github
 - [ ] FIXME: multiple instances
+- [ ] Срабатывает через раз
