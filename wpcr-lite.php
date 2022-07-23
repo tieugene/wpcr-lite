@@ -8,10 +8,6 @@
  * License: GPL v3 or later
  * License URI: https://www.gnu.org/licenses/gpl-3.0.html
  * Text Domain: wpcr-lite
- *
- * TODO: handle errors
- * TODO: plugin/theme
- * WARNING: tune /etc/hosts @ customer vhost
  */
 
 class WPCRL_Updater {
@@ -21,24 +17,18 @@ class WPCRL_Updater {
 	private string $slug;
 	private string $version;
 
-	//private bool $active;       // ? disable if not active ?
+	//private bool $active;     // ? disable if not active ?
 	public function __construct( $file ) {
 		error_log( "WPCRL_Updater started for " . $file );
-		$this->file = $file;
-		add_action( 'admin_init', array( $this, 'set_plugin_properties' ) );  // wp-admin
-		add_filter( 'pre_set_site_transient_update_plugins', array( &$this, 'check_update' ) );
-		add_filter( 'plugins_api', array( &$this, 'check_info' ), 10, 3 );
-
-		return $this;
-	}
-
-	public function set_plugin_properties(): void {  // calling from wp-admin only
-		error_log( "set_plugin_properties()" );
+		$this->file     = $file;
 		$this->plugin   = get_plugin_data( $this->file );
 		$this->basename = plugin_basename( $this->file );
 		$this->slug     = dirname( $this->basename );  // or current(explode('/', $this->basename))
 		$this->version  = $this->plugin['Version'];
-		//$this->active = is_plugin_active( $this->basename );
+		add_filter( 'pre_set_site_transient_update_plugins', array( &$this, 'check_update' ) );
+		add_filter( 'plugins_api', array( &$this, 'check_info' ), 10, 3 );
+
+		return $this;
 	}
 
 	public function check_update( $transient ) {
@@ -48,10 +38,8 @@ class WPCRL_Updater {
 		if ( empty( $transient->checked ) ) {
 			return $transient;
 		}
-
 		// Get the remote version
 		$remote_meta = $this->get_remote_meta();
-
 		// If a newer version is available, add the update
 		error_log( "Versions: this=" . $this->version . ", remote=" . $remote_meta->version );
 		if ( version_compare( $this->version, $remote_meta->version, '<' ) ) {
