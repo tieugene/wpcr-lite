@@ -14,9 +14,8 @@ class WPCRL_Updater {
 	private string $file;       // :str - abs path
 	private array $plugin;      // :array - ['Version'[, 'PluginURI', 'UpdateURI', ...]
 	private string $basename;   // :str - rel slug/slug.php
-	private string $slug;
-	private string $version;
-
+	private string $slug;       // :str - short (dirname)
+	private string $version;    // :str
 	//private bool $active;     // ? disable if not active ?
 	public function __construct( $file ) {
 		error_log( "WPCRL_Updater started for " . $file );
