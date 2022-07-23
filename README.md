@@ -37,4 +37,4 @@ function register_updater(): void {
 
 ## Thanks
 
-Thanks [Matthew Ray](https://github.com/rayman813/smashing-updater-plugin) and (Abid Omar)[https://github.com/omarabid/Self-Hosted-WordPress-Plugin-repository] for samples.
+Thanks [Matthew Ray](https://github.com/rayman813/smashing-updater-plugin) and [Abid Omar](https://github.com/omarabid/Self-Hosted-WordPress-Plugin-repository) for samples.
