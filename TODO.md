@@ -2,8 +2,8 @@
 
 Issues:
 
-- [ ] #2: Show update details
 - [ ] #1: plugins/themes
+- [ ] #2: Show update details
 - [ ] #3: No active if const not set
 - [ ] Errors handling
 - [ ] #?: PhpDoc it
