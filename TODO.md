@@ -2,7 +2,6 @@
 
 Issues:
 
-- [ ] #1: plugins/themes
 - [ ] #2: Show update details
 - [ ] #3: No active if const not set
 - [ ] Errors handling
@@ -18,3 +17,4 @@ Issues:
 - [x] #7: FIXME: multiple core instances
 - [x] #8: FIXME: multiple updater instances
 - [x] #9: FIXME: Срабатывает через раз
+- [x] #1: plugins/themes

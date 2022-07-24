@@ -13,12 +13,11 @@ class WPCRL_Core {
 	}
 	private function __construct() {
 		error_log("WPCRL_Core.__construct()");
-		// TODO: replace with path construct
+		// TODO: replace with path join
 		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/class-wpcr-lite-updater.php';
 	}
-	public function register_plugin(string $file) : void {
-		error_log("WPCRL_Core.register_plugin()");
-		// self::get_instance();
+	public function register_party(string $file) : void {
+		error_log("WPCRL_Core.register_party(" . $file . ")");
 		if (!array_key_exists($file, $this->registry)) {
 			$this->registry[$file] = new WPCRL_Updater($file);
 		} else
