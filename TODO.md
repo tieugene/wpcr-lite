@@ -2,21 +2,18 @@
 
 Issues:
 
-- [ ] #2: Show update details:
-   `[500]: GET /wp-admin/plugin-install.php?tab=plugin-information&plugin=cat-tiles&`
-- [ ] #3: No active if const not set
 - [ ] #12: FIXME: Deletes theme on update [RTFM](https://github.com/afragen)
 - [ ] #13: PhpDoc it
 - [ ] Errors handling
 
 ### 0.0.2
+- [ ] #2: Show update details:
+  `[500]: GET /wp-admin/plugin-install.php?tab=plugin-information&plugin=cat-tiles&`
 - [ ] #4: UI (URL, check update if [in]active)
 - [ ] _Self update [from GitHub]_
 - [ ] ? Namespace?
-
-## Done
-- [x] #5: Std plugin struct
-- [x] #7: FIXME: multiple core instances
-- [x] #8: FIXME: multiple updater instances
-- [x] #9: FIXME: Срабатывает через раз
-- [x] #1: plugins/themes
+- [ ] Custom party updatability depends on:
+  - WPCRL_URL set
+  - wpcr-lite active
+  - custom active
+  - 'chk inactive custom' enabled

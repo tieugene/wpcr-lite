@@ -106,6 +106,7 @@ class WPCRL_Updater {
 
 	private function get_remote_meta(): ?object {
 		error_log( "WPCRL_Updater.get_remote_meta() for " . $this->slug );
+		// TODO: join path
 		$request = wp_remote_get( WPCRL_URL . $this->suffix . '/' . $this->slug . '.json' );
 
 		if ( ! is_wp_error( $request ) || wp_remote_retrieve_response_code( $request ) === 200 )

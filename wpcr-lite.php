@@ -2,7 +2,7 @@
 /**
  * @wordpress-plugin
  * Plugin Name: WordPress Custom Repo Lite
- * Plugin URI:  https://github.com/tieugene/wpcr-lite/issues/5
+ * Plugin URI:  https://github.com/tieugene/wpcr-lite/
  * Description: Allow to use custom WordPress plugins repository
  * Version:     0.0.1
  * Author:      TI_Eugene <ti.eugene@gmail.com>
@@ -12,4 +12,5 @@
  * Text Domain: languages/
  */
 
-require plugin_dir_path( __FILE__ ) . 'includes/class-wpcr-lite.php';
+if (defined('WPCRL_URL'))
+	require plugin_dir_path( __FILE__ ) . 'includes/class-wpcr-lite.php';
