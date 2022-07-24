@@ -1,6 +1,6 @@
 # wpcr-lite
 
-WordPress Custom Repo Lite
+WordPress Custom Repo Lite - WP plugin to update custom plugins/themes with custom repository.
 
 ## Usage
 
@@ -9,7 +9,7 @@ WordPress Custom Repo Lite
    ```php
    define ('WPCRL_URL', 'https://example.com/myrepo/');
    ```
-1. Add correspondent code to your custom plugins (see below).
+1. Add correspondent code to your custom components (plugin/theme) (see below).
 
 ### Repository
 
@@ -17,18 +17,18 @@ WordPress Custom Repo Lite
 2. It should contain folders:
    - `plugins`
    - `themes`
-1. Both of folders should contain files like `myplugin.json` with at least 2 keys: `"version"`, `"url"` (of new package).
+1. Both of folders should contain files like `mycomponent.json` with at least 2 keys: `"version"`, `"url"` (of new package).
 
-### Custom plugin
+### Custom component (plugin/theme)
 
-Custom plugin must have at least `Version: ...` in its heading comments.
+Custom component must have at least `Version: ...`.
 Add code below to your plugin's main file or theme's `fuctions.php`:
 
 ```php
 add_filter('plugins_loaded', function() {
     // theme: 'after_setup_theme' or 'init'
 	if ( class_exists( 'WPCRL_Core' ) )
-		WPCRL_Core::get_instance()->register_plugin( __FILE__ );
+		WPCRL_Core::get_instance()->register_component( __FILE__ );
     });
 ```
 
