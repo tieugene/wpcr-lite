@@ -14,8 +14,8 @@ class WPCRL_Updater {
 		$this->slug     = dirname( $this->basename );  // or current(explode('/', $this->basename))
 		$this->version  = $this->plugin['Version'];
 		error_log( "WPCRL_Updater.__construct(" . $this->slug . ")" );
-		add_filter( 'pre_set_site_transient_update_plugins', array( &$this, 'check_update' ) );
-		add_filter( 'plugins_api', array( &$this, 'check_info' ), 10, 3 );
+		add_filter( 'pre_set_site_transient_update_plugins', array( $this, 'check_update' ) );
+		add_filter( 'plugins_api', array( $this, 'on_plugins_api'), 10, 3);
 
 		return $this;
 	}
@@ -29,8 +29,7 @@ class WPCRL_Updater {
 		}
 		// Get the remote version
 		$remote_meta = $this->get_remote_meta();
-		// FIXME: return if empty
-		if (!$remote_meta)
+		if (is_null($remote_meta))
 			return $transient;
 		// If a newer version is available, add the update
 		error_log( "Versions: this=" . $this->version . ", remote=" . $remote_meta->version );
@@ -48,12 +47,14 @@ class WPCRL_Updater {
 		return $transient;
 	}
 
-	public function check_info( $obj, $action, $arg ) {
+	public function on_plugins_api( $obj, $action, $arg ) {
 		// slot for plugins_api (
 		// "View details" => action=plugin_information, slug=cat-tiles
-		error_log( "WPCRL_Updater.check_info(): action=" . $action . ", slug=" . $arg->slug );
+		error_log( "WPCRL_Updater.on_plugins_api(): action=" . $action . ", slug=" . $arg->slug );
 		if ( ! empty( $args->slug ) && $arg->slug === $this->slug ) {
 			$remote_meta = $this->get_remote_meta();
+			if (is_null($remote_meta))
+				return $obj;
 			$response    = array(
 				'slug'          => $this->slug,
 				'version'       => $remote_meta->version,  // or 'new_version' => ... ?
@@ -74,7 +75,7 @@ class WPCRL_Updater {
 		return $obj;
 	}
 
-	private function get_remote_meta(): object|bool {
+	private function get_remote_meta(): ?object {
 		error_log( "WPCRL_Updater.get_remote_meta()" );
 		$request = wp_remote_get( WPCRL_URL . 'plugins/' . $this->slug . '.json' );
 
@@ -84,6 +85,6 @@ class WPCRL_Updater {
 			return @json_decode( $request['body'] );
 		}
 
-		return false;  // FIXME: return empty object
+		return null;  // FIXME: return nothing
 	}
 }
