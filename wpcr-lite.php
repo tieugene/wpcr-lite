@@ -13,9 +13,3 @@
  */
 
 require plugin_dir_path( __FILE__ ) . 'includes/class-wpcr-lite.php';
-function run_wpcr_lite() : void{
-
-	$plugin = new WPCRL_Core();
-
-}
-run_wpcr_lite();

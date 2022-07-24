@@ -25,16 +25,8 @@ Custom plugin must have at least `Version: ...` in its heading comments.
 Add code below to your plugin:
 
 ```php
-add_filter( 'plugins_loaded', 'register_updater' );
-function register_updater(): void {
-        if ( class_exists( 'WPCRL_Updater' ) ) {
-                new WPCRL_Updater( __FILE__ );
-        }
-}
-// or lambda:
-// add_filter('plugins_loaded', function() {if (class_exists( 'WPCRL_Updater' )) new WPCRL_Updater( __FILE__ );});
+add_filter('plugins_loaded', function() {
+	if ( class_exists( 'WPCRL_Core' ) )
+		WPCRL_Core::get_instance()->register_plugin( __FILE__ );
+    });
 ```
-
-## Thanks
-
-Thanks [Matthew Ray](https://github.com/rayman813/smashing-updater-plugin) and [Abid Omar](https://github.com/omarabid/Self-Hosted-WordPress-Plugin-repository) for samples.
