@@ -2,10 +2,12 @@
 
 Issues:
 
-- [ ] #2: Show update details
+- [ ] #2: Show update details:
+   `[500]: GET /wp-admin/plugin-install.php?tab=plugin-information&plugin=cat-tiles&`
 - [ ] #3: No active if const not set
+- [ ] #12: FIXME: Deletes theme on update [RTFM](https://github.com/afragen)
+- [ ] #13: PhpDoc it
 - [ ] Errors handling
-- [ ] #?: PhpDoc it
 
 ### 0.0.2
 - [ ] #4: UI (URL, check update if [in]active)
