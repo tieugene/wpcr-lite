@@ -2,9 +2,23 @@
 
 namespace WPCRL;
 
+function Log($msg, $lvl = LOG_INFO) : void {
+	if (defined('WPCRL_LOG') and ($lvl <= WPCRL_LOG)) {
+		if (is_array($msg) || is_object($msg)) {
+			error_log("WPCRL::Log: " . print_r($msg, true));
+		} else {
+			error_log("WPCRL::Log: " . $msg);
+		}
+	}
+}
+
 class Core {
 	private static ?Core $instance = null;
 	private array $registry = array();
+	private function __construct() {
+		Log("Core.__construct()");
+		require_once ( __DIR__ . '/class-wpcr-lite-updater.php');
+	}
 	public static function get_instance() : Core
 	{
 		if (null === self::$instance) {
@@ -13,15 +27,11 @@ class Core {
 
 		return self::$instance;
 	}
-	private function __construct() {
-		error_log("WPCRL::Core.__construct()");
-		require_once ( __DIR__ . '/class-wpcr-lite-updater.php');
-	}
 	public function register_component(string $file) : void {
-		error_log("WPCRL::Core.register_party(" . $file . ")");
+		Log("Core.register_party(" . $file . ")");
 		if (!array_key_exists($file, $this->registry)) {
 			$this->registry[$file] = new Updater($file);
 		} else
-			error_log("Already registered: " . $file);
+			Log("Already registered: " . $file, LOG_WARNING);
 	}
 }

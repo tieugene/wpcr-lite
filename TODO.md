@@ -1,7 +1,6 @@
 # TODO
 
 ### 0.0.1:
-- [ ] #19: Logging
 - [ ] #16: Errors handling
 
 ### 0.0.2:
