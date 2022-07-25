@@ -14,7 +14,7 @@ class Updater {
 	private object $component;  // ['Version'[, 'PluginURI', 'UpdateURI', ...]
 	private int $ctype;
 	private string $version;
-	private string $suffix;     // remote repo dir; TODO: remove this
+	private static array $suffix = array(ComponentType::Plugin=>'plugins', ComponentType::Theme=>'themes');
 
 	//private bool $active;     // ? disable if not active ?
 	public function __construct( $file ) {
@@ -24,21 +24,19 @@ class Updater {
 			$this->basename  = plugin_basename( $this->file );
 			$this->component = (object) get_plugin_data( $this->file );
 			$this->ctype     = ComponentType::Plugin;
-			$this->suffix    = 'plugins';
 			add_filter( 'pre_set_site_transient_update_plugins', array( $this, 'check_update' ) );
 			add_filter( 'plugins_api', array( $this, 'on_component_api' ), 10, 3 );
 		} elseif ( str_starts_with( $file, get_theme_root() ) ) {
 			$this->basename  = $this->slug;
 			$this->component = wp_get_theme( $this->slug );
 			$this->ctype     = ComponentType::Theme;
-			$this->suffix    = 'themes';
 			add_filter( 'pre_set_site_transient_update_themes', array( $this, 'check_update' ) );
 			add_filter( 'themes_api', array( $this, 'on_component_api' ), 10, 3 );
 		} else {
-			error_log( "It is something strange" );
+			error_log( "Unknown component: " . $file );
 		}
 		$this->version = $this->component->Version;
-		error_log( "WPCRL::Updater.__construct(" . $this->slug . " v. " . $this->version . "), " . $this->suffix );
+		error_log( "WPCRL::Updater.__construct(" . $this->slug . " v. " . $this->version . "), " . self::$suffix[$this->ctype] );
 
 		return $this;
 	}
@@ -127,7 +125,7 @@ class Updater {
 	private function get_remote_meta(): ?object {
 		error_log( "WPCRL::Updater.get_remote_meta() for " . $this->slug );
 		// TODO: join path
-		$request = wp_remote_get( WPCRL_URL . $this->suffix . '/' . $this->slug . '.json' );
+		$request = wp_remote_get( WPCRL_URL . self::$suffix[$this->ctype] . '/' . $this->slug . '.json' );
 
 		if ( ! is_wp_error( $request ) || wp_remote_retrieve_response_code( $request ) === 200 ) {
 			return @json_decode( $request['body'] );

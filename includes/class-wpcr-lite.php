@@ -15,7 +15,6 @@ class Core {
 	}
 	private function __construct() {
 		error_log("WPCRL::Core.__construct()");
-		// TODO: replace with path join
 		require_once ( __DIR__ . '/class-wpcr-lite-updater.php');
 	}
 	public function register_component(string $file) : void {
