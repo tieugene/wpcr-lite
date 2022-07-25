@@ -14,7 +14,7 @@ class Updater {
 	private object $component;  // ['Version'[, 'PluginURI', 'UpdateURI', ...]
 	private int $ctype;
 	private string $version;
-	private static array $suffix = array(ComponentType::Plugin=>'plugins', ComponentType::Theme=>'themes');
+	private static array $suffix = array( ComponentType::Plugin => 'plugins', ComponentType::Theme => 'themes' );
 
 	//private bool $active;     // ? disable if not active ?
 	public function __construct( $file ) {
@@ -36,7 +36,7 @@ class Updater {
 			error_log( "Unknown component: " . $file );
 		}
 		$this->version = $this->component->Version;
-		error_log( "WPCRL::Updater.__construct(" . $this->slug . " v. " . $this->version . "), " . self::$suffix[$this->ctype] );
+		error_log( "WPCRL::Updater.__construct(" . $this->slug . " v. " . $this->version . "), " . self::$suffix[ $this->ctype ] );
 
 		return $this;
 	}
@@ -59,17 +59,17 @@ class Updater {
 			error_log( "Need update" );
 			if ( $this->ctype == ComponentType::Plugin ) {
 				$response = (object) array(
-					'id'            => $this->basename,
-					'slug'          => $this->slug,
-					'plugin'        => $this->basename,
-					'new_version'   => $remote_meta->version,
-					'url'           => '',
-					'package'       => $remote_meta->url,
-					'icons'         => array(),
-					'banners'       => array(),
-					'banners_rtl'   => array(),
-					'tested'        => '',
-					'requires_php'  => '',
+					'id'           => $this->basename,
+					'slug'         => $this->slug,
+					'plugin'       => $this->basename,
+					'new_version'  => $remote_meta->version,
+					'url'          => '',
+					'package'      => $remote_meta->url,
+					'icons'        => array(),
+					'banners'      => array(),
+					'banners_rtl'  => array(),
+					'tested'       => '',
+					'requires_php' => '',
 					//'compatibility' => new stdClass()
 				);
 			} else {
@@ -124,8 +124,7 @@ class Updater {
 
 	private function get_remote_meta(): ?object {
 		error_log( "WPCRL::Updater.get_remote_meta() for " . $this->slug );
-		// TODO: join path
-		$request = wp_remote_get( WPCRL_URL . self::$suffix[$this->ctype] . '/' . $this->slug . '.json' );
+		$request = wp_remote_get( path_join( path_join( WPCRL_URL, self::$suffix[ $this->ctype ] ), $this->slug . '.json' ) );
 
 		if ( ! is_wp_error( $request ) || wp_remote_retrieve_response_code( $request ) === 200 ) {
 			return @json_decode( $request['body'] );
