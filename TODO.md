@@ -1,9 +1,9 @@
 # TODO
 
 ### 0.0.1:
-- [ ] #16: Errors handling
-- [ ] #19: Logging
 - [ ] #20 Namespace
+- [ ] #19: Logging
+- [ ] #16: Errors handling
 
 ### 0.0.2:
 - [ ] #13: PhpDoc it
