@@ -13,4 +13,6 @@
  */
 
 if (defined('WPCRL_URL'))
-	require plugin_dir_path( __FILE__ ) . 'includes/class-wpcr-lite.php';
+	require_once ( __DIR__ . '/includes/class-wpcr-lite.php');
+else
+	error_log("WPCRL_URL not defined");

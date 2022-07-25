@@ -14,7 +14,7 @@ class WPCRL_Core {
 	private function __construct() {
 		error_log("WPCRL_Core.__construct()");
 		// TODO: replace with path join
-		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/class-wpcr-lite-updater.php';
+		require_once ( __DIR__ . '/class-wpcr-lite-updater.php');
 	}
 	public function register_component(string $file) : void {
 		error_log("WPCRL_Core.register_party(" . $file . ")");
