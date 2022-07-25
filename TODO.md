@@ -1,7 +1,6 @@
 # TODO
 
 ### 0.0.1:
-- [ ] #20 Namespace
 - [ ] #19: Logging
 - [ ] #16: Errors handling
 

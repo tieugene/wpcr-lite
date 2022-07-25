@@ -1,11 +1,13 @@
 <?php
 
+namespace WPCRL;
+
 class ComponentType {
 	public const Plugin = 1;
 	public const Theme = 2;
 }
 
-class WPCRL_Updater {
+class Updater {
 	private string $file;       // abs path
 	private string $slug;       // short (dirname)
 	private string $basename;   // rel slug/slug.php
@@ -36,7 +38,7 @@ class WPCRL_Updater {
 			error_log( "It is something strange" );
 		}
 		$this->version = $this->component->Version;
-		error_log( "WPCRL_Updater.__construct(" . $this->slug . " v. " . $this->version . "), " . $this->suffix );
+		error_log( "WPCRL::Updater.__construct(" . $this->slug . " v. " . $this->version . "), " . $this->suffix );
 
 		return $this;
 	}
@@ -44,7 +46,7 @@ class WPCRL_Updater {
 	public function check_update( $transient ) {
 		// slot #1: pre_set_site_transient_update_<component>s()
 		// just checks whether component update available
-		error_log( "WPCRL_Updater.check_update() for " . $this->slug );
+		error_log( "WPCRL::Updater.check_update() for " . $this->slug );
 		if ( empty( $transient->checked ) ) {
 			return $transient;
 		}
@@ -70,7 +72,7 @@ class WPCRL_Updater {
 					'banners_rtl'   => array(),
 					'tested'        => '',
 					'requires_php'  => '',
-					'compatibility' => new stdClass()
+					//'compatibility' => new stdClass()
 				);
 			} else {
 				$response = array(
@@ -92,7 +94,7 @@ class WPCRL_Updater {
 
 	public function on_component_api( $obj, $action, $arg ) {
 		// plugin: action=plugin_information, slug=cat-tiles
-		error_log( "WPCRL_Updater.on_component_api(): action=" . $action . ", slug=" . $arg->slug );
+		error_log( "WPCRL::Updater.on_component_api(): action=" . $action . ", slug=" . $arg->slug );
 		// error_log( @json_encode( $arg, JSON_PRETTY_PRINT ) );
 		if ( ! empty( $args->slug ) && $arg->slug === $this->slug ) {
 			$remote_meta = $this->get_remote_meta();
@@ -123,7 +125,7 @@ class WPCRL_Updater {
 	}
 
 	private function get_remote_meta(): ?object {
-		error_log( "WPCRL_Updater.get_remote_meta() for " . $this->slug );
+		error_log( "WPCRL::Updater.get_remote_meta() for " . $this->slug );
 		// TODO: join path
 		$request = wp_remote_get( WPCRL_URL . $this->suffix . '/' . $this->slug . '.json' );
 
