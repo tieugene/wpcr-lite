@@ -27,10 +27,14 @@ Add code below to your plugin's main file or theme's `fuctions.php`:
 ```php
 add_filter('plugins_loaded', function() {
     // theme: 'after_setup_theme' or 'init'
-	if ( class_exists( 'WPCRL_Core' ) )
-		WPCRL_Core::get_instance()->register_component( __FILE__ );
+	if ( class_exists( 'WPCRL\Core' ) )
+		WPCRL\Core::get_instance()->register_component( __FILE__ );
     });
 ```
+
+### Constants
+- `WPCRL_URL` - mandatory string to define custom repo base.
+- `WPCRL_LOG` - optional int (0..7) for logging (RTFM `LOG_...` PHP constants).
 
 ## RTFM
 - [Matthew Ray](https://www.smashingmagazine.com/2015/08/deploy-wordpress-plugins-with-github-using-transients/): [plugin lib](https://github.com/rayman813/smashing-updater-plugin)

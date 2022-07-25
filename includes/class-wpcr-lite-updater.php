@@ -14,31 +14,30 @@ class Updater {
 	private object $component;  // ['Version'[, 'PluginURI', 'UpdateURI', ...]
 	private int $ctype;
 	private string $version;
-	private string $suffix;     // remote repo dir; TODO: remove this
+	private static array $suffix = array( ComponentType::Plugin => 'plugins', ComponentType::Theme => 'themes' );
 
 	//private bool $active;     // ? disable if not active ?
 	public function __construct( $file ) {
 		$this->file = $file;
 		$this->slug = basename( dirname( $file ) );
+		Log( "Updater.__construct(" . $this->slug . ")", LOG_INFO);
 		if ( str_starts_with( $file, WP_PLUGIN_DIR ) ) {
 			$this->basename  = plugin_basename( $this->file );
 			$this->component = (object) get_plugin_data( $this->file );
 			$this->ctype     = ComponentType::Plugin;
-			$this->suffix    = 'plugins';
-			add_filter( 'pre_set_site_transient_update_plugins', array( $this, 'check_update' ) );
-			add_filter( 'plugins_api', array( $this, 'on_component_api' ), 10, 3 );
+			add_filter( 'pre_set_site_transient_update_plugins', array( &$this, 'check_update' ) );
+			add_filter( 'plugins_api', array( &$this, 'on_component_api' ), 10, 3 );
 		} elseif ( str_starts_with( $file, get_theme_root() ) ) {
 			$this->basename  = $this->slug;
 			$this->component = wp_get_theme( $this->slug );
 			$this->ctype     = ComponentType::Theme;
-			$this->suffix    = 'themes';
-			add_filter( 'pre_set_site_transient_update_themes', array( $this, 'check_update' ) );
-			add_filter( 'themes_api', array( $this, 'on_component_api' ), 10, 3 );
+			add_filter( 'pre_set_site_transient_update_themes', array( &$this, 'check_update' ) );
+			add_filter( 'themes_api', array( &$this, 'on_component_api' ), 10, 3 );
 		} else {
-			error_log( "It is something strange" );
+			Log( "Unknown component: " . $file , LOG_ERR);
 		}
 		$this->version = $this->component->Version;
-		error_log( "WPCRL::Updater.__construct(" . $this->slug . " v. " . $this->version . "), " . $this->suffix );
+		Log( "It is " . self::$suffix[ $this->ctype ], LOG_DEBUG);
 
 		return $this;
 	}
@@ -46,32 +45,32 @@ class Updater {
 	public function check_update( $transient ) {
 		// slot #1: pre_set_site_transient_update_<component>s()
 		// just checks whether component update available
-		error_log( "WPCRL::Updater.check_update() for " . $this->slug );
+		Log( "Updater.check_update(" . $this->slug . ")", LOG_INFO);
 		if ( empty( $transient->checked ) ) {
 			return $transient;
 		}
-		// error_log( @json_encode( $transient, JSON_PRETTY_PRINT ) );
+		Log("Transient:", LOG_DEBUG);
+		Log($transient, LOG_DEBUG);
 		$remote_meta = $this->get_remote_meta();
 		if ( is_null( $remote_meta ) ) {
 			return $transient;
 		}
-		// If a newer version is available, add the update
-		error_log( "Versions: this=" . $this->version . ", remote=" . $remote_meta->version );
+		Log( "Versions: this=" . $this->version . ", remote=" . $remote_meta->version, LOG_INFO);
 		if ( version_compare( $this->version, $remote_meta->version, '<' ) ) {
-			error_log( "Need update" );
+			Log( "Need update", LOG_INFO);
 			if ( $this->ctype == ComponentType::Plugin ) {
 				$response = (object) array(
-					'id'            => $this->basename,
-					'slug'          => $this->slug,
-					'plugin'        => $this->basename,
-					'new_version'   => $remote_meta->version,
-					'url'           => '',
-					'package'       => $remote_meta->url,
-					'icons'         => array(),
-					'banners'       => array(),
-					'banners_rtl'   => array(),
-					'tested'        => '',
-					'requires_php'  => '',
+					'id'           => $this->basename,
+					'slug'         => $this->slug,
+					'plugin'       => $this->basename,
+					'new_version'  => $remote_meta->version,
+					'url'          => '',
+					'package'      => $remote_meta->url,
+					'icons'        => array(),
+					'banners'      => array(),
+					'banners_rtl'  => array(),
+					'tested'       => '',
+					'requires_php' => '',
 					//'compatibility' => new stdClass()
 				);
 			} else {
@@ -94,8 +93,9 @@ class Updater {
 
 	public function on_component_api( $obj, $action, $arg ) {
 		// plugin: action=plugin_information, slug=cat-tiles
-		error_log( "WPCRL::Updater.on_component_api(): action=" . $action . ", slug=" . $arg->slug );
-		// error_log( @json_encode( $arg, JSON_PRETTY_PRINT ) );
+		Log( "Updater.on_component_api(): action=" . $action . ", slug=" . $arg->slug, LOG_INFO);
+		Log("Arg:", LOG_DEBUG);
+		Log($arg, LOG_DEBUG);
 		if ( ! empty( $args->slug ) && $arg->slug === $this->slug ) {
 			$remote_meta = $this->get_remote_meta();
 			if ( is_null( $remote_meta ) ) {
@@ -125,13 +125,18 @@ class Updater {
 	}
 
 	private function get_remote_meta(): ?object {
-		error_log( "WPCRL::Updater.get_remote_meta() for " . $this->slug );
-		// TODO: join path
-		$request = wp_remote_get( WPCRL_URL . $this->suffix . '/' . $this->slug . '.json' );
+		Log( "Updater.get_remote_meta(" . $this->slug . ")", LOG_INFO);
+		$url = path_join( path_join( WPCRL_URL, self::$suffix[ $this->ctype ] ), $this->slug . '.json' );
+		Log("Get " . $url, LOG_DEBUG);
+		$request = wp_remote_get( $url );
 
 		if ( ! is_wp_error( $request ) || wp_remote_retrieve_response_code( $request ) === 200 ) {
-			return @json_decode( $request['body'] );
-		}
+			$response= @json_decode( $request['body'] );
+			Log("Response:", LOG_DEBUG);
+			Log($response, LOG_DEBUG);
+			return $response;
+		} else
+			Log("URL not available: " . $url, LOG_WARNING);
 
 		return null;  // TODO: return void
 	}
