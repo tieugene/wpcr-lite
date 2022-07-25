@@ -1,18 +1,17 @@
 # TODO
 
-Issues:
-
+### 0.0.1:
 - [ ] #16: Errors handling
-- [ ] #17: 'wp theme list': permanent 'available'
+- [ ] #19: Logging
+- [ ] #20 Namespace
 
-### 0.0.2
+### 0.0.2:
 - [ ] #13: PhpDoc it
-- [ ] #2: Show update details
-- [ ] #4: UI (URL, check update if [in]active)
+- [ ]  #2: Show update details
+- [ ]  #4: UI (URL, check update if [in]active)
 - [ ] Custom party updatability depends on:
   - WPCRL_URL set
   - wpcr-lite active
   - custom active
   - 'chk inactive custom' enabled
 - [ ] _Self update [from GitHub]_
-- [ ] ? Namespace?

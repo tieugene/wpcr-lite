@@ -1,8 +1,8 @@
 <?php
 
-enum ComponentType {
-	case Plugin;
-	case Theme;
+class ComponentType {
+	public const Plugin = 1;
+	public const Theme = 2;
 }
 
 class WPCRL_Updater {
@@ -10,7 +10,7 @@ class WPCRL_Updater {
 	private string $slug;       // short (dirname)
 	private string $basename;   // rel slug/slug.php
 	private object $component;  // ['Version'[, 'PluginURI', 'UpdateURI', ...]
-	private ComponentType $ctype;
+	private int $ctype;
 	private string $version;
 	private string $suffix;     // remote repo dir; TODO: remove this
 
