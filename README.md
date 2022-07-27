@@ -15,9 +15,10 @@ WordPress Custom Repo Lite - WP plugin to update custom plugins/themes with cust
 
 1. Custom repository can be static web-site.
 2. It should contain folders:
-   - `plugins`
-   - `themes`
-1. Both of folders should contain files like `mycomponent.json` with at least 2 keys: `"version"`, `"url"` (of new package).
+   - `plugins/`
+   - `themes/`
+3. Both of folders should contain files like `mycomponent.json` with at least 2 keys: `"version"`, `"url"` (of new package).
+4. `"url"` meta-key points to new zipball, that can be placed anywhere.
 
 ### Custom component (plugin/theme)
 
@@ -35,7 +36,3 @@ add_filter('plugins_loaded', function() {
 ### Constants
 - `WPCRL_URL` - mandatory string to define custom repo base.
 - `WPCRL_LOG` - optional int (0..7) for logging (RTFM `LOG_...` PHP constants).
-
-## RTFM
-- [Matthew Ray](https://www.smashingmagazine.com/2015/08/deploy-wordpress-plugins-with-github-using-transients/): [plugin lib](https://github.com/rayman813/smashing-updater-plugin)
-- Abid Omar: [plugin lib](https://github.com/omarabid/Self-Hosted-WordPress-Plugin-repository)
