@@ -1,4 +1,4 @@
-=== WordPress Custom Repo Lite ===
+=== WPCR Lite ===
 Contributors: tieugene
 Tags: custom repository, update
 Requires at least: 4.7
@@ -8,7 +8,7 @@ Requires PHP: 7.4
 License: GPLv3
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 
-Enable to use customer repository to update plugins and/or themes.
+WP Custom Repo Lite enables to use customer repository to update plugins and/or themes.
 
 == Description ==
 

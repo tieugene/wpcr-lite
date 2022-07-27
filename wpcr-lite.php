@@ -1,8 +1,8 @@
 <?php
 /**
- * Plugin Name: WordPress Custom Repo Lite
+ * Plugin Name: WPCR Lite
  * Plugin URI:  https://github.com/tieugene/wpcr-lite/
- * Description: Allow to use custom WordPress plugins repository
+ * Description: WordPress Custom Repo Lite - allows to use custom WP plugins repository
  * Version:     0.0.1
  * Author:      TI_Eugene <ti.eugene@gmail.com>
  * Author URI:  https://www.eap.su
