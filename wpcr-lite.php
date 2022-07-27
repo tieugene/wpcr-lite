@@ -12,4 +12,5 @@
  * Text Domain: languages/
  */
 
+
 require_once ( __DIR__ . '/includes/class-wpcr-lite.php');

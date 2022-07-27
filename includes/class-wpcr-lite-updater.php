@@ -2,21 +2,49 @@
 
 namespace WPCRL;
 
+/**
+ * Updating component type
+ */
 class ComponentType {
 	public const Plugin = 1;
 	public const Theme = 2;
 }
 
+/**
+ * Component updater - creates and handles required hooks for given component (plugin/theme)
+ */
 class Updater {
-	private string $file;       // abs path
-	private string $slug;       // short (dirname)
-	private string $basename;   // rel slug/slug.php
-	private object $component;  // ['Version'[, 'PluginURI', 'UpdateURI', ...]
+	/**
+	 * @var string Full path to plugin main file or theme's 'function.php'
+	 */
+	private string $file;
+	/**
+	 * @var string Folder name of the component
+	 */
+	private string $slug;
+	/**
+	 * @var string 'Folder/main_file.php' for plugin / 'folder' for theme
+	 */
+	private string $basename;
+	/**
+	 * @var object Component local metadata
+	 */
+	private object $component;
+	/**
+	 * @var int Component type (plugin/theme)
+	 */
 	private int $ctype;
+	/**
+	 * @var string Current component version
+	 */
 	private string $version;
 
 	//private bool $active;     // TODO: ? disable if not active ? (issue #4)
-	public function __construct( $file ) {
+
+	/**
+	 * @param string $file Full path to plugin main file or theme's 'function.php'
+	 */
+	public function __construct( string $file ) {
 		$this->file = $file;
 		$this->slug = basename( dirname( $file ) );
 		Log( "Updater.__construct(" . $this->slug . ")", LOG_INFO );
@@ -43,13 +71,23 @@ class Updater {
 		return $this;
 	}
 
+	/**
+	 * @return string URL suffix depending on component type
+	 */
 	private function suffix(): string {
 		static $suffix_name = array( ComponentType::Plugin => 'plugins', ComponentType::Theme => 'themes' );
 
 		return $suffix_name[ $this->ctype ];
 	}
 
-	public function check_update( $transient ) {
+	/**
+	 * Hooks 'pre_set_site_transient_update_plugins' / 'pre_set_site_transient_update_themes'
+	 *
+	 * @param mixed $transient Transient
+	 *
+	 * @return mixed Updated (or not) input transient
+	 */
+	public function check_update( mixed $transient ): mixed {
 		// slot #1: pre_set_site_transient_update_<component>s()
 		// just checks whether component update available
 		Log( "Updater.check_update(" . $this->slug . ")", LOG_INFO );
@@ -98,7 +136,16 @@ class Updater {
 		return $transient;
 	}
 
-	public function on_component_api( $obj, $action, $arg ) {
+	/**
+	 * Hooks 'plugins_api' / 'themes_api'
+	 *
+	 * @param bool $result Default result to return
+	 * @param string $action What meta-info wanted
+	 * @param object $arg Component meta-info from remote source
+	 *
+	 * @return bool|array|object Component update metadata (if success) or default (if not)
+	 */
+	public function on_component_api( bool $result, string $action, object $arg ): bool|array|object {
 		// plugin: action=plugin_information, slug=cat-tiles
 		Log( "Updater.on_component_api(): action=" . $action . ", slug=" . $arg->slug, LOG_INFO );
 		Log( "Arg:", LOG_DEBUG );
@@ -106,7 +153,7 @@ class Updater {
 		if ( ! empty( $args->slug ) && $arg->slug === $this->slug ) {
 			$remote_meta = $this->get_remote_meta();
 			if ( is_null( $remote_meta ) ) {
-				return $obj;
+				return $result;
 			}
 			$response = array(
 				'slug'          => $this->slug,
@@ -128,9 +175,14 @@ class Updater {
 			return $response;
 		}
 
-		return $obj;
+		return $result;
 	}
 
+	/**
+	 * Get updating metadata from custom repo.
+	 *
+	 * @return object|null Updating metadata
+	 */
 	private function get_remote_meta(): ?object {  // TODO: object|void
 		Log( "Updater.get_remote_meta(" . $this->slug . ")", LOG_INFO );
 		// TODO: parametrized URL (issue #25)

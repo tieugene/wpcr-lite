@@ -1,8 +1,7 @@
 # TODO
 
 ## 0.0.1:
-- [x] #16: Errors handling
-- [ ] #13: PhpDoc it
+- [ ] #27: Publish it
 
 ## 0.0.2:
 - [ ] #2: Show update details
