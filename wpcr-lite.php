@@ -1,6 +1,5 @@
 <?php
 /**
- * @wordpress-plugin
  * Plugin Name: WordPress Custom Repo Lite
  * Plugin URI:  https://github.com/tieugene/wpcr-lite/
  * Description: Allow to use custom WordPress plugins repository
@@ -9,7 +8,8 @@
  * Author URI:  https://www.eap.su
  * License:     GPL-3.0
  * License URI: https://www.gnu.org/licenses/gpl-3.0.html
- * Text Domain: languages/
+ * Text Domain: wpcr-lite
+ * Domain Path: languages/
  */
 
 
