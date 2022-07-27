@@ -12,7 +12,4 @@
  * Text Domain: languages/
  */
 
-if (defined('WPCRL_URL'))
-	require_once ( __DIR__ . '/includes/class-wpcr-lite.php');
-else
-	error_log("WPCRL_URL not defined");
+require_once ( __DIR__ . '/includes/class-wpcr-lite.php');

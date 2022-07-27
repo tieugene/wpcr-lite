@@ -1,15 +1,21 @@
 # TODO
 
-### 0.0.1:
-- [ ] #16: Errors handling
-
-### 0.0.2:
+## 0.0.1:
+- [x] #16: Errors handling
 - [ ] #13: PhpDoc it
-- [ ]  #2: Show update details
-- [ ]  #4: UI (URL, check update if [in]active)
-- [ ] Custom party updatability depends on:
+
+## 0.0.2:
+- [ ] #2: Show update details
+- [ ] #4: UI (URL, check update if [in]active)
+- [ ] Component updatability depends on:
   - WPCRL_URL set
   - wpcr-lite active
-  - custom active
-  - 'chk inactive custom' enabled
+  - component active
+  - 'chk inactive component' enabled
+
+## x.y.z:
+- [ ] #23: Use 'Plugin URL'
+- [ ] #24: Credentials
+- [ ] #25: Parametrized URL
+- [ ] #26: Plugins list
 - [ ] _Self update [from GitHub]_
